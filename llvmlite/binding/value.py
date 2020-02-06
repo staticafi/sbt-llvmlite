@@ -299,6 +299,17 @@ class ValueRef(ffi.ObjectRef):
                              % (self._kind,))
         return ffi.ret_string(ffi.lib.LLVMPY_GetOpcodeName(self))
 
+    @property
+    def initializer(self):
+        """
+        This value's initializer
+        """
+        if not self.is_global:
+            raise ValueError('expected global value, got %s'
+                             % (self._kind,))
+        return ValueRef(ffi.lib.LLVMPY_GlobalGetInitializer(self),
+                        self._kind, self._parents)
+
 
 class _ValueIterator(ffi.ObjectRef):
 
@@ -515,3 +526,6 @@ ffi.lib.LLVMPY_OperandsIterNext.restype = ffi.LLVMValueRef
 
 ffi.lib.LLVMPY_GetOpcodeName.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_GetOpcodeName.restype = c_void_p
+
+ffi.lib.LLVMPY_GlobalGetInitializer.argtypes = [ffi.LLVMValueRef]
+ffi.lib.LLVMPY_GlobalGetInitializer.restype = ffi.LLVMValueRef

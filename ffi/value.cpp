@@ -482,6 +482,12 @@ LLVMPY_IsDeclaration(LLVMValueRef GV)
     return LLVMIsDeclaration(GV);
 }
 
+API_EXPORT(LLVMValueRef)
+LLVMPY_GlobalGetInitializer(LLVMValueRef G)
+{
+    return LLVMGetInitializer(G);
+}
+
 
 API_EXPORT(void)
 LLVMPY_WriteCFG(LLVMValueRef Fval, const char **OutStr, int ShowInst) {

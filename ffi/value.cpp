@@ -488,6 +488,23 @@ LLVMPY_GlobalGetInitializer(LLVMValueRef G)
     return LLVMGetInitializer(G);
 }
 
+API_EXPORT(unsigned)
+LLVMPY_PhiCountIncoming(LLVMValueRef P)
+{
+    return LLVMCountIncoming(P);
+}
+
+API_EXPORT(LLVMValueRef)
+LLVMPY_PhiGetIncomingValue(LLVMValueRef P, unsigned Idx)
+{
+    return LLVMGetIncomingValue(P, Idx);
+}
+
+API_EXPORT(LLVMBasicBlockRef)
+LLVMPY_PhiGetIncomingBlock(LLVMValueRef P, unsigned Idx)
+{
+    return LLVMGetIncomingBlock(P, Idx);
+}
 
 API_EXPORT(void)
 LLVMPY_WriteCFG(LLVMValueRef Fval, const char **OutStr, int ShowInst) {

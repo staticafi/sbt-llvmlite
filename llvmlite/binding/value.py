@@ -310,6 +310,32 @@ class ValueRef(ffi.ObjectRef):
         return ValueRef(ffi.lib.LLVMPY_GlobalGetInitializer(self),
                         self._kind, self._parents)
 
+    @property
+    def phi_incoming_count(self):
+        """
+        Get incoming value and block of a PHI node
+        """
+        if not self.opcode == 'phi':
+            raise ValueError('expected phi instruction, got %s'
+                             % (self.opcode()))
+        return ffi.lib.LLVMPY_PhiCountIncoming(self)
+
+    def phi_incoming(self, idx):
+        """
+        Get incoming value and block of a PHI node
+        """
+        if not self.opcode == 'phi':
+            raise ValueError('expected phi instruction, got %s'
+                             % (self.opcode()))
+        if idx >= self.phi_incoming_count:
+            raise ValueError('index of phi instruction out of bounds')
+
+        # FIXME: we screw up the parents here
+        return (ValueRef(ffi.lib.LLVMPY_PhiGetIncomingValue(self, idx),
+                         'operand', self._parents),
+                ValueRef(ffi.lib.LLVMPY_PhiGetIncomingBlock(self, idx),
+                         'block', self._parents))
+
 
 class _ValueIterator(ffi.ObjectRef):
 
@@ -529,3 +555,13 @@ ffi.lib.LLVMPY_GetOpcodeName.restype = c_void_p
 
 ffi.lib.LLVMPY_GlobalGetInitializer.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_GlobalGetInitializer.restype = ffi.LLVMValueRef
+
+ffi.lib.LLVMPY_PhiCountIncoming.argtypes = [ffi.LLVMValueRef]
+ffi.lib.LLVMPY_PhiCountIncoming.restype = c_uint
+
+ffi.lib.LLVMPY_PhiGetIncomingValue.argtypes = [ffi.LLVMValueRef, c_uint]
+ffi.lib.LLVMPY_PhiGetIncomingValue.restype = ffi.LLVMValueRef
+
+ffi.lib.LLVMPY_PhiGetIncomingBlock.argtypes = [ffi.LLVMValueRef, c_uint]
+ffi.lib.LLVMPY_PhiGetIncomingBlock.restype = ffi.LLVMValueRef
+

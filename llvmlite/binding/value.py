@@ -61,13 +61,27 @@ class TypeRef(ffi.ObjectRef):
         return ffi.lib.LLVMPY_TypeIsPointer(self)
 
     @property
+    def is_vector(self):
+        """
+        Returns true is the type is a vector type.
+        """
+        return ffi.lib.LLVMPY_TypeIsVector(self)
+
+    @property
+    def is_array(self):
+        """
+        Returns true is the type is an array type.
+        """
+        return ffi.lib.LLVMPY_TypeIsArray(self)
+
+    @property
     def element_type(self):
         """
         Returns the pointed-to type. When the type is not a pointer,
         raises exception.
         """
-        if not self.is_pointer:
-            raise ValueError("Type {} is not a pointer".format(self))
+        if not (self.is_pointer or self.is_array or self.is_vector):
+            raise ValueError(f"Type {self} has no elements")
         return TypeRef(ffi.lib.LLVMPY_GetElementType(self))
 
     def __str__(self):
@@ -464,6 +478,12 @@ ffi.lib.LLVMPY_PrintType.restype = c_void_p
 
 ffi.lib.LLVMPY_TypeIsPointer.argtypes = [ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_TypeIsPointer.restype = c_bool
+
+ffi.lib.LLVMPY_TypeIsArray.argtypes = [ffi.LLVMTypeRef]
+ffi.lib.LLVMPY_TypeIsArray.restype = c_bool
+
+ffi.lib.LLVMPY_TypeIsVector.argtypes = [ffi.LLVMTypeRef]
+ffi.lib.LLVMPY_TypeIsVector.restype = c_bool
 
 ffi.lib.LLVMPY_GetElementType.argtypes = [ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_GetElementType.restype = ffi.LLVMTypeRef

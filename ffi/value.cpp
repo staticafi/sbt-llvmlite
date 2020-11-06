@@ -414,14 +414,34 @@ LLVMPY_TypeIsPointer(LLVMTypeRef type)
     return llvm::unwrap(type)->isPointerTy();
 }
 
+API_EXPORT(bool)
+LLVMPY_TypeIsArray(LLVMTypeRef type)
+{
+    return llvm::unwrap(type)->isArrayTy();
+}
+
+API_EXPORT(bool)
+LLVMPY_TypeIsVector(LLVMTypeRef type)
+{
+    return llvm::unwrap(type)->isVectorTy();
+}
+
 API_EXPORT(LLVMTypeRef)
 LLVMPY_GetElementType(LLVMTypeRef type)
 {
     llvm::Type* unwrapped = llvm::unwrap(type);
-    llvm::PointerType* ty = llvm::dyn_cast<llvm::PointerType>(unwrapped);
-    if (ty != nullptr) {
+    if (auto* ty = llvm::dyn_cast<llvm::PointerType>(unwrapped)) {
         return llvm::wrap(ty->getElementType());
     }
+
+    if (auto* ty = llvm::dyn_cast<llvm::ArrayType>(unwrapped)) {
+        return llvm::wrap(ty->getElementType());
+    }
+
+    if (auto* ty = llvm::dyn_cast<llvm::VectorType>(unwrapped)) {
+        return llvm::wrap(ty->getElementType());
+    }
+
     return nullptr;
 }
 

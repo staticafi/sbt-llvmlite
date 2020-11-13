@@ -108,8 +108,7 @@ def main_posix(kind, library_ext):
                            "to the path for llvm-config" % (llvm_config,))
 
     out = out.decode('latin1')
-    print(out)
-    if not (out.startswith('10.0.') or out.startswith('9.0.') or\
+    if not (out.startswith('11.0.') or out.startswith('10.0.') or out.startswith('9.0.') or\
             out.startswith('8.0.') or out.startswith('7.0.') or\
             out.startswith('7.1.')):
         msg = (

@@ -6,6 +6,7 @@
 
 extern "C" {
 
+#if LLVM_VERSION_MAJOR < 11
 namespace llvm {
     inline PassManagerBuilder *unwrap(LLVMPassManagerBuilderRef P) {
         return reinterpret_cast<PassManagerBuilder*>(P);
@@ -15,6 +16,7 @@ namespace llvm {
         return reinterpret_cast<LLVMPassManagerBuilderRef>(P);
     }
 }
+#endif // LLVM < 11
 
 
 API_EXPORT(LLVMPassManagerBuilderRef)

@@ -421,6 +421,12 @@ LLVMPY_TypeIsArray(LLVMTypeRef type)
 }
 
 API_EXPORT(bool)
+LLVMPY_TypeIsStruct(LLVMTypeRef type)
+{
+    return llvm::unwrap(type)->isStructTy();
+}
+
+API_EXPORT(bool)
 LLVMPY_TypeIsVector(LLVMTypeRef type)
 {
     return llvm::unwrap(type)->isVectorTy();

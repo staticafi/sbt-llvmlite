@@ -75,6 +75,13 @@ class TypeRef(ffi.ObjectRef):
         return ffi.lib.LLVMPY_TypeIsArray(self)
 
     @property
+    def is_struct(self):
+        """
+        Returns true is the type is an array type.
+        """
+        return ffi.lib.LLVMPY_TypeIsStruct(self)
+
+    @property
     def element_type(self):
         """
         Returns the pointed-to type. When the type is not a pointer,
@@ -472,7 +479,6 @@ ffi.lib.LLVMPY_SetValueName.argtypes = [ffi.LLVMValueRef, c_char_p]
 ffi.lib.LLVMPY_TypeOf.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_TypeOf.restype = ffi.LLVMTypeRef
 
-
 ffi.lib.LLVMPY_PrintType.argtypes = [ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_PrintType.restype = c_void_p
 
@@ -481,6 +487,9 @@ ffi.lib.LLVMPY_TypeIsPointer.restype = c_bool
 
 ffi.lib.LLVMPY_TypeIsArray.argtypes = [ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_TypeIsArray.restype = c_bool
+
+ffi.lib.LLVMPY_TypeIsStruct.argtypes = [ffi.LLVMTypeRef]
+ffi.lib.LLVMPY_TypeIsStruct.restype = c_bool
 
 ffi.lib.LLVMPY_TypeIsVector.argtypes = [ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_TypeIsVector.restype = c_bool

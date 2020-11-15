@@ -107,6 +107,12 @@ class ModuleRef(ffi.ObjectRef):
             raise NameError(name)
         return TypeRef(p)
 
+    def get_type_size(self, ty):
+        """
+        Get the store size of type in bits
+        """
+        return ffi.lib.LLVMPY_TypeSize(self, ty)
+
     def verify(self):
         """
         Verify the module IR's correctness.  RuntimeError is raised on error.
@@ -303,6 +309,9 @@ ffi.lib.LLVMPY_SetTarget.argtypes = [ffi.LLVMModuleRef, c_char_p]
 
 ffi.lib.LLVMPY_GetNamedGlobalVariable.argtypes = [ffi.LLVMModuleRef, c_char_p]
 ffi.lib.LLVMPY_GetNamedGlobalVariable.restype = ffi.LLVMValueRef
+
+ffi.lib.LLVMPY_TypeSize.argtypes = [ffi.LLVMModuleRef, ffi.LLVMTypeRef]
+ffi.lib.LLVMPY_TypeSize.restype = c_size_t
 
 ffi.lib.LLVMPY_GetNamedStructType.argtypes = [ffi.LLVMModuleRef, c_char_p]
 ffi.lib.LLVMPY_GetNamedStructType.restype = ffi.LLVMTypeRef

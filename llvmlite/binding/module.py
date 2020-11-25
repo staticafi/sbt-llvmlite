@@ -109,9 +109,16 @@ class ModuleRef(ffi.ObjectRef):
 
     def get_type_size(self, ty):
         """
-        Get the store size of type in bits
+        Get the size of type in bits
         """
         return ffi.lib.LLVMPY_TypeSize(self, ty)
+
+    def get_type_store_size(self, ty):
+        """
+        Get the size of type in bits
+        """
+        return ffi.lib.LLVMPY_TypeStoreSize(self, ty)
+
 
     def verify(self):
         """
@@ -312,6 +319,9 @@ ffi.lib.LLVMPY_GetNamedGlobalVariable.restype = ffi.LLVMValueRef
 
 ffi.lib.LLVMPY_TypeSize.argtypes = [ffi.LLVMModuleRef, ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_TypeSize.restype = c_size_t
+
+ffi.lib.LLVMPY_TypeStoreSize.argtypes = [ffi.LLVMModuleRef, ffi.LLVMTypeRef]
+ffi.lib.LLVMPY_TypeStoreSize.restype = c_size_t
 
 ffi.lib.LLVMPY_GetNamedStructType.argtypes = [ffi.LLVMModuleRef, c_char_p]
 ffi.lib.LLVMPY_GetNamedStructType.restype = ffi.LLVMTypeRef

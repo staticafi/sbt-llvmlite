@@ -154,8 +154,16 @@ API_EXPORT(size_t)
 LLVMPY_TypeSize(LLVMModuleRef mod, LLVMTypeRef type)
 {
     llvm::Module *m = llvm::unwrap(mod);
+    return m->getDataLayout().getTypeSizeInBits(llvm::unwrap(type));
+}
+
+API_EXPORT(size_t)
+LLVMPY_TypeStoreSize(LLVMModuleRef mod, LLVMTypeRef type)
+{
+    llvm::Module *m = llvm::unwrap(mod);
     return m->getDataLayout().getTypeStoreSizeInBits(llvm::unwrap(type));
 }
+
 
 API_EXPORT(LLVMTypeRef)
 LLVMPY_GetNamedStructType(LLVMModuleRef M,

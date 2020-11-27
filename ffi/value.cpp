@@ -451,6 +451,28 @@ LLVMPY_GetElementType(LLVMTypeRef type)
     return nullptr;
 }
 
+API_EXPORT(unsigned)
+LLVMPY_GetStructNumElements(LLVMTypeRef type)
+{
+    llvm::Type* unwrapped = llvm::unwrap(type);
+    if (auto* ty = llvm::dyn_cast<llvm::StructType>(unwrapped)) {
+        return ty->getNumElements();
+    }
+    return 0;
+}
+
+API_EXPORT(LLVMTypeRef)
+LLVMPY_GetStructElementType(LLVMTypeRef type, unsigned n)
+{
+    llvm::Type* unwrapped = llvm::unwrap(type);
+    if (auto* ty = llvm::dyn_cast<llvm::StructType>(unwrapped)) {
+        assert (n < ty->getNumElements() && "Invalid element number");
+        return llvm::wrap(ty->getElementType(n));
+    }
+    return nullptr;
+}
+
+
 API_EXPORT(void)
 LLVMPY_SetLinkage(LLVMValueRef Val, int Linkage)
 {

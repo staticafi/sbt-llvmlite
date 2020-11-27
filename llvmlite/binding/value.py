@@ -91,6 +91,27 @@ class TypeRef(ffi.ObjectRef):
             raise ValueError(f"Type {self} has no elements")
         return TypeRef(ffi.lib.LLVMPY_GetElementType(self))
 
+    @property
+    def struct_num_elements(self):
+        """
+        Returns the pointed-to type. When the type is not a pointer,
+        raises exception.
+        """
+        if not self.is_struct:
+            raise ValueError(f"Type {self} has no elements")
+        return ffi.lib.LLVMPY_GetStructNumElements(self)
+
+    def struct_element_type(self, n):
+        """
+        Returns the nth type in struct. When the type is not a pointer,
+        raises exception.
+        """
+        if not self.is_struct:
+            raise ValueError(f"Type {self} has no elements")
+        assert n < self.struct_num_elements, f"Invalid type index: {n}"
+        return TypeRef(ffi.lib.LLVMPY_GetStructElementType(self, n))
+
+
     def __str__(self):
         return ffi.ret_string(ffi.lib.LLVMPY_PrintType(self))
 
@@ -497,6 +518,11 @@ ffi.lib.LLVMPY_TypeIsVector.restype = c_bool
 ffi.lib.LLVMPY_GetElementType.argtypes = [ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_GetElementType.restype = ffi.LLVMTypeRef
 
+ffi.lib.LLVMPY_GetStructNumElements.argtypes = [ffi.LLVMTypeRef]
+ffi.lib.LLVMPY_GetStructNumElements.restype = c_uint
+
+ffi.lib.LLVMPY_GetStructElementType.argtypes = [ffi.LLVMTypeRef, c_uint]
+ffi.lib.LLVMPY_GetStructElementType.restype = ffi.LLVMTypeRef
 
 ffi.lib.LLVMPY_GetTypeName.argtypes = [ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_GetTypeName.restype = c_void_p

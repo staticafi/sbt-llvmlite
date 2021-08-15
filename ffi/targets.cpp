@@ -233,7 +233,9 @@ LLVMPY_CreateTargetMachine(LLVMTargetRef T,
 
     TargetOptions opt;
 //     opt.JITEmitDebugInfo = EmitJITDebug;
+#if LLVM_VERSION_MAJOR < 12
     opt.PrintMachineCode = PrintMC;
+#endif
 
     return wrap(unwrap(T)->createTargetMachine(Triple, CPU, Features, opt,
                                                rm, cm, cgol));

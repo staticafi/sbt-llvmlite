@@ -108,11 +108,10 @@ def main_posix(kind, library_ext):
                            "to the path for llvm-config" % (llvm_config,))
 
     out = out.decode('latin1')
-    if not (out.startswith('11.0.') or out.startswith('10.0.') or out.startswith('9.0.') or\
-            out.startswith('8.0.') or out.startswith('7.0.') or\
-            out.startswith('7.1.')):
+    major = int(out.split('.')[0])
+    if not (7 <= major <= 12):
         msg = (
-            "Building llvmlite requires LLVM 7.0.x, 7.1.x, 8.0.x, or 9.0.x Be sure to "
+            "Building llvmlite requires LLVM 7-12. Be sure to "
             "set LLVM_CONFIG to the right executable path.\n"
             "Read the documentation at http://llvmlite.pydata.org/ for more "
             "information about building llvmlite.\n"

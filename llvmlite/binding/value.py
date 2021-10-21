@@ -183,6 +183,15 @@ class ValueRef(ffi.ObjectRef):
         return self._kind == 'operand'
 
     @property
+    def is_constantexpr(self):
+        """
+        Whether this operand is a contant expr
+        """
+        if not self.is_operand:
+            raise ValueError('expected operand, got %s' % (self._kind,))
+        return ffi.lib.LLVMPY_IsConstantExpr(self) != 0
+
+    @property
     def name(self):
         return _decode_string(ffi.lib.LLVMPY_GetValueName(self))
 
@@ -549,6 +558,9 @@ ffi.lib.LLVMPY_AddFunctionAttr.argtypes = [ffi.LLVMValueRef, c_uint]
 
 ffi.lib.LLVMPY_IsDeclaration.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_IsDeclaration.restype = c_int
+
+ffi.lib.LLVMPY_IsConstantExpr.argtypes = [ffi.LLVMValueRef]
+ffi.lib.LLVMPY_IsConstantExpr.restype = c_int
 
 ffi.lib.LLVMPY_FunctionAttributesIter.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_FunctionAttributesIter.restype = ffi.LLVMAttributeListIterator

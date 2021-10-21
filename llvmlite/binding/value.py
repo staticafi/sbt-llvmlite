@@ -362,6 +362,17 @@ class ValueRef(ffi.ObjectRef):
                         self._kind, self._parents)
 
     @property
+    def ce_as_inst(self):
+        """
+        ConstantExpr as Instruction
+        """
+        if not self.is_constantexpr:
+            raise ValueError('expected constant expr, got %s' % (self._kind,))
+        return ValueRef(ffi.lib.LLVMPY_ConstantExprAsInst(self),
+                        'instruction', self._parents)
+
+
+    @property
     def phi_incoming_count(self):
         """
         Get incoming value and block of a PHI node
@@ -622,6 +633,9 @@ ffi.lib.LLVMPY_GetOpcodeName.restype = c_void_p
 
 ffi.lib.LLVMPY_GlobalGetInitializer.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_GlobalGetInitializer.restype = ffi.LLVMValueRef
+
+ffi.lib.LLVMPY_ConstantExprAsInst.argtypes = [ffi.LLVMValueRef]
+ffi.lib.LLVMPY_ConstantExprAsInst.restype = ffi.LLVMValueRef
 
 ffi.lib.LLVMPY_PhiCountIncoming.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_PhiCountIncoming.restype = c_uint

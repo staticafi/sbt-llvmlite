@@ -544,6 +544,14 @@ LLVMPY_GlobalGetInitializer(LLVMValueRef G)
     return LLVMGetInitializer(G);
 }
 
+API_EXPORT(LLVMValueRef)
+LLVMPY_ConstantExprAsInst(LLVMValueRef CE)
+{
+    using namespace llvm;
+    return wrap(cast<ConstantExpr>(unwrap<Value>(CE))->getAsInstruction());
+}
+
+
 API_EXPORT(unsigned)
 LLVMPY_PhiCountIncoming(LLVMValueRef P)
 {

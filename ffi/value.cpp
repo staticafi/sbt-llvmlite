@@ -6,6 +6,7 @@
 
 // the following is needed for WriteGraph()
 #include "llvm/Analysis/CFGPrinter.h"
+#include "llvm/IR/DebugInfoMetadata.h"
 
 /* An iterator around a attribute list, including the stop condition */
 struct AttributeListIterator {
@@ -367,6 +368,50 @@ LLVMPY_GetValueName(LLVMValueRef Val)
 {
     return LLVMGetValueName(Val);
 }
+
+API_EXPORT(const char *)
+LLVMPY_GetDbgFile(LLVMValueRef Val)
+{
+    using namespace llvm;
+    auto *val = unwrap<Value>(Val);
+    if (auto *I = dyn_cast<Instruction>(val)) {
+        if (auto &D = I->getDebugLoc()) {
+            return LLVMPY_CreateString(D.get()->getFilename().str().c_str());
+        }
+    }
+
+    return LLVMPY_CreateString("");
+}
+
+API_EXPORT(unsigned)
+LLVMPY_GetDbgLine(LLVMValueRef Val)
+{
+    using namespace llvm;
+    auto *val = unwrap<Value>(Val);
+    if (auto *I = dyn_cast<Instruction>(val)) {
+        if (auto &D = I->getDebugLoc()) {
+            return D.getLine();
+        }
+    }
+
+    return 0;
+}
+
+
+API_EXPORT(unsigned)
+LLVMPY_GetDbgCol(LLVMValueRef Val)
+{
+    using namespace llvm;
+    auto *val = unwrap<Value>(Val);
+    if (auto *I = dyn_cast<Instruction>(val)) {
+        if (auto &D = I->getDebugLoc()) {
+            return D.getCol();
+        }
+    }
+
+    return 0;
+}
+
 
 API_EXPORT(void)
 LLVMPY_SetValueName(LLVMValueRef Val, const char *Name)

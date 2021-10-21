@@ -195,6 +195,12 @@ class ValueRef(ffi.ObjectRef):
     def name(self):
         return _decode_string(ffi.lib.LLVMPY_GetValueName(self))
 
+    @property
+    def dbg_loc(self):
+        return (_decode_string(ffi.lib.LLVMPY_GetDbgFile(self)),
+                ffi.lib.LLVMPY_GetDbgLine(self),
+                ffi.lib.LLVMPY_GetDbgCol(self))
+
     @name.setter
     def name(self, val):
         ffi.lib.LLVMPY_SetValueName(self, _encode_string(val))
@@ -515,6 +521,9 @@ ffi.lib.LLVMPY_GetGlobalParent.restype = ffi.LLVMModuleRef
 ffi.lib.LLVMPY_GetValueName.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_GetValueName.restype = c_char_p
 
+ffi.lib.LLVMPY_GetDbgFile.argtypes = [ffi.LLVMValueRef]
+ffi.lib.LLVMPY_GetDbgFile.restype = c_char_p
+
 ffi.lib.LLVMPY_SetValueName.argtypes = [ffi.LLVMValueRef, c_char_p]
 
 ffi.lib.LLVMPY_TypeOf.argtypes = [ffi.LLVMValueRef]
@@ -546,6 +555,12 @@ ffi.lib.LLVMPY_GetStructElementType.restype = ffi.LLVMTypeRef
 
 ffi.lib.LLVMPY_GetTypeName.argtypes = [ffi.LLVMTypeRef]
 ffi.lib.LLVMPY_GetTypeName.restype = c_void_p
+
+ffi.lib.LLVMPY_GetDbgLine.argtypes = [ffi.LLVMValueRef]
+ffi.lib.LLVMPY_GetDbgLine.restype = c_uint
+
+ffi.lib.LLVMPY_GetDbgCol.argtypes = [ffi.LLVMValueRef]
+ffi.lib.LLVMPY_GetDbgCol.restype = c_uint
 
 ffi.lib.LLVMPY_GetLinkage.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_GetLinkage.restype = c_int

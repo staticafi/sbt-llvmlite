@@ -187,8 +187,6 @@ class ValueRef(ffi.ObjectRef):
         """
         Whether this operand is a contant expr
         """
-        if not self.is_operand:
-            raise ValueError('expected operand, got %s' % (self._kind,))
         return ffi.lib.LLVMPY_IsConstantExpr(self) != 0
 
     @property

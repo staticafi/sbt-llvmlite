@@ -4,6 +4,8 @@
 #include "llvm-c/Analysis.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/TypeFinder.h"
+#include "llvm/IR/IntrinsicInst.h"
+#include "llvm/IR/DebugInfoMetadata.h"
 #include "core.h"
 
 
@@ -133,6 +135,46 @@ API_EXPORT(void)
 LLVMPY_SetModuleName(LLVMModuleRef M, const char *Name)
 {
     llvm::unwrap(M)->setModuleIdentifier(Name);
+}
+
+API_EXPORT(LLVMValueRef)
+LLVMPY_ParseDbgDeclareAddr(LLVMValueRef I)
+{
+    using namespace llvm;
+    if (auto *DD = dyn_cast<DbgDeclareInst>(llvm::unwrap<Value>(I))) {
+        return wrap(DD->getAddress());
+    }
+    if (auto *DD = dyn_cast<DbgValueInst>(llvm::unwrap<Value>(I))) {
+        return wrap(DD->getValue());
+    }
+    return nullptr;
+}
+
+
+API_EXPORT(const char *)
+LLVMPY_ParseDbgDeclareVar(LLVMValueRef I)
+{
+    using namespace llvm;
+    if (auto *DD = dyn_cast<DbgDeclareInst>(llvm::unwrap<Value>(I))) {
+        return DD->getVariable()->getName().str().c_str();
+    }
+    if (auto *DD = dyn_cast<DbgValueInst>(llvm::unwrap<Value>(I))) {
+        return DD->getVariable()->getName().str().c_str();
+    }
+    return "";
+}
+
+API_EXPORT(const char *)
+LLVMPY_ParseDbgDeclareType(LLVMValueRef I)
+{
+    using namespace llvm;
+    if (auto *DD = dyn_cast<DbgDeclareInst>(llvm::unwrap<Value>(I))) {
+        return DD->getVariable()->getType()->getName().str().c_str();
+    }
+    if (auto *DD = dyn_cast<DbgValueInst>(llvm::unwrap<Value>(I))) {
+        return DD->getVariable()->getType()->getName().str().c_str();
+    }
+    return "";
 }
 
 API_EXPORT(LLVMValueRef)

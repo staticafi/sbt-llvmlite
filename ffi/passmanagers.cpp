@@ -107,11 +107,13 @@ LLVMPY_AddIPSCCPPass(LLVMPassManagerRef PM)
     LLVMAddIPSCCPPass(PM);
 }
 
+/*
 API_EXPORT(void)
 LLVMPY_AddDeadCodeEliminationPass(LLVMPassManagerRef PM)
 {
     unwrap(PM)->add(createDeadCodeEliminationPass());
 }
+*/
 
 API_EXPORT(void)
 LLVMPY_AddCFGSimplificationPass(LLVMPassManagerRef PM)
@@ -143,11 +145,13 @@ LLVMPY_AddSCCPPass(LLVMPassManagerRef PM)
     LLVMAddSCCPPass(PM);
 }
 
+/*
 API_EXPORT(void)
 LLVMPY_AddSROAPass(LLVMPassManagerRef PM)
 {
     unwrap(PM)->add(createSROAPass());
 }
+*/
 
 API_EXPORT(void)
 LLVMPY_AddTypeBasedAliasAnalysisPass(LLVMPassManagerRef PM)

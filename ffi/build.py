@@ -109,9 +109,9 @@ def main_posix(kind, library_ext):
 
     out = out.decode('latin1')
     major = int(out.split('.')[0])
-    if not (7 <= major <= 13):
+    if not (7 <= major <= 14):
         msg = (
-            "Building llvmlite requires LLVM 7-13. Be sure to "
+            "Building llvmlite requires LLVM 7-14. Be sure to "
             "set LLVM_CONFIG to the right executable path.\n"
             "Read the documentation at http://llvmlite.pydata.org/ for more "
             "information about building llvmlite.\n"

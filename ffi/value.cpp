@@ -580,6 +580,14 @@ LLVMPY_IsDeclaration(LLVMValueRef GV)
 }
 
 API_EXPORT(int)
+LLVMPY_IsConstant(LLVMValueRef V)
+{
+    using namespace llvm;
+    return isa<Constant>(unwrap<Value>(V));
+}
+
+
+API_EXPORT(int)
 LLVMPY_IsConstantExpr(LLVMValueRef V)
 {
     using namespace llvm;

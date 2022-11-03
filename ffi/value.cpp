@@ -594,6 +594,15 @@ LLVMPY_IsConstantExpr(LLVMValueRef V)
     return isa<ConstantExpr>(unwrap<Value>(V));
 }
 
+API_EXPORT(int)
+LLVMPY_IsGlobalVariableConstant(LLVMValueRef V)
+{
+    using namespace llvm;
+    auto *GV = dyn_cast<GlobalVariable>(unwrap<Value>(V));
+    return GV && GV->isConstant();
+}
+
+
 
 API_EXPORT(LLVMValueRef)
 LLVMPY_GlobalGetInitializer(LLVMValueRef G)

@@ -189,6 +189,13 @@ class ValueRef(ffi.ObjectRef):
         """
         return ffi.lib.LLVMPY_IsConstant(self) != 0
 
+    def is_global_constant(self):
+        """
+        Whether this value is global variable and the memory it references
+        is constant.
+        """
+        return ffi.lib.LLVMPY_IsGlobalVariableConstant(self) != 0
+
     @property
     def is_constantexpr(self):
         """
@@ -595,6 +602,9 @@ ffi.lib.LLVMPY_IsConstant.restype = c_int
 
 ffi.lib.LLVMPY_IsConstantExpr.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_IsConstantExpr.restype = c_int
+
+ffi.lib.LLVMPY_IsGlobalVariableConstant.argtypes = [ffi.LLVMValueRef]
+ffi.lib.LLVMPY_IsGlobalVariableConstant.restype = c_int
 
 ffi.lib.LLVMPY_FunctionAttributesIter.argtypes = [ffi.LLVMValueRef]
 ffi.lib.LLVMPY_FunctionAttributesIter.restype = ffi.LLVMAttributeListIterator
